@@ -7,8 +7,8 @@
   targetPort = 3003
 
 [[redirects]]
-  from = "/api/v1/auth/*"
-  to = "/.netlify/functions/auth/:splat"
+  from = "/api/v1/*"
+  to = "/.netlify/functions/api/:splat"
   status = 200
 
 [[redirects]]

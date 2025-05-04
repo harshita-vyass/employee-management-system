@@ -58,7 +58,7 @@ const Users = () => {
 
   useEffect(() => {
     fetchUserData(page);
-    setTimeout(() => setLoading(false), 3000);
+    setTimeout(() => setLoading(false), 500);
   }, [page, payload, sort]);
 
   const fetchUserData = (page) => {
