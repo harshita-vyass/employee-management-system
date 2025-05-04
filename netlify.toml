@@ -1,4 +1,3 @@
-# netlify.toml
 [build]
   functions = "netlify/functions"
   publish = "build"
@@ -7,7 +6,12 @@
   port = 8989
   targetPort = 3003
 
-  [[redirects]]
-  from = "api/v1/auth/*"
+[[redirects]]
+  from = "/api/v1/auth/*"
   to = "/.netlify/functions/auth/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
   status = 200

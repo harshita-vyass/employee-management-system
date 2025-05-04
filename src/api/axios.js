@@ -3,10 +3,10 @@ import { getStringFromLocalStorage } from "../utils/common";
 
 const serviceConfig = {
   auth: {
-    baseURL: "http://localhost:8989/api/v1/",
+    baseURL: process.env.REACT_APP_AUTH_BASE_URL,
   },
   default: {
-    baseURL: "http://192.168.29.94:8080/api/v1/",
+    baseURL: process.env.REACT_APP_DEFAULT_BASE_URL,
   },
 };
 const getAxiosInstance = (serviceName) => {

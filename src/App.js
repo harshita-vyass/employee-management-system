@@ -26,6 +26,7 @@ function App() {
           <Route path="projects" element={<Projects />} />
           <Route path="clients" element={<Clients />} />
         </Route>
+        <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
     </BrowserRouter>
   );

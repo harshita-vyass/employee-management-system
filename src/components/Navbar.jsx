@@ -24,7 +24,7 @@ const Navbar = () => {
   };
 
   const getDisplayName = () => {
-    return `${JSON.parse(localStorage.getItem("employee"))["firstName"]} ${JSON.parse(localStorage.getItem("employee"))["lastName"]
+    return `${JSON.parse(localStorage.getItem("employee"))?.firstName} ${JSON.parse(localStorage.getItem("employee"))?.lastName
       }`;
   };
 
