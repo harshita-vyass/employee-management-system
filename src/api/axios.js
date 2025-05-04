@@ -1,21 +1,77 @@
 import axios from "axios";
+import { getStringFromLocalStorage } from "../utils/common";
 
-const api = axios.create({
-  baseURL: "http://192.168.29.14:8080/api/v1/",
-  headers: {
-    "Content-Type": "application/json",
+const serviceConfig = {
+  auth: {
+    baseURL: "http://localhost:8989/api/v1/",
   },
-});
+  default: {
+    baseURL: "http://192.168.29.94:8080/api/v1/",
+  },
+};
+const getAxiosInstance = (serviceName) => {
+  const config = serviceConfig[serviceName ?? "default"];
+  // console.log(config);
 
-const apiClient = {
+  const instance = axios.create({
+    baseURL: config.baseURL,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  instance.interceptors.request.use(
+    (request) => {
+      var token = getStringFromLocalStorage("token", false);
+      if (token && serviceName !== "auth") {
+        request.headers.Authorization = `Bearer ${token}`;
+      }
+      return request;
+    },
+    (error) => Promise.reject(error)
+  );
+
+  return instance;
+};
+
+export const apiClient = {
   post: async (url, payload = {}) => {
     try {
-      const response = await api.post(url, payload);
+      const response = await getAxiosInstance().post(url, payload);
       return response.data;
     } catch (error) {
       console.error(error);
+      throw error;
+    }
+  },
+  get: async (url, params = {}) => {
+    try {
+      const response = await getAxiosInstance().get(url, { params });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  patch: async (url, params = {}) => {
+    try {
+      const response = await getAxiosInstance().patch(url, null, { params });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
     }
   },
 };
 
-export default apiClient
+export const authClient = {
+  post: async (url, payload = {}) => {
+    try {
+      const response = await getAxiosInstance("auth").post(url, payload);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+};
