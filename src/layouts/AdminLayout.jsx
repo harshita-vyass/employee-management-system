@@ -5,8 +5,9 @@ import { Outlet } from 'react-router-dom'
 const AdminLayout = () => {
     return (
         <div className=''>
+            
             <Navbar />
-            <div className='ml-[20%]'>
+            <div className='md:ml-[20%]'>
         <Outlet />
       </div>
             </div>

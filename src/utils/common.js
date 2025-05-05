@@ -30,3 +30,7 @@ export const formatDate = (date) => {
 
   // const formattedDate = `${day} ${month}, ${year}`;
 };
+
+export const getLeaveTypeFromKey = (value) => {
+  return JSON.parse(localStorage.getItem("leaveTypes"))[value];
+};

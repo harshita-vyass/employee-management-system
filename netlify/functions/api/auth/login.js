@@ -19,6 +19,7 @@ const login = async (event) => {
             "refreshToken": token,
             "id": 2,
             "username": "jane_doe",
+           
             "roles": [
                 "ADMIN",
                 "MANAGER",
@@ -37,6 +38,8 @@ const login = async (event) => {
             "refreshToken": token,
             "id": 3,
             "username": "john_doe",
+            firstName: "John",
+            lastName: "Doe",
             "roles": [
                 "DEFAULT"
             ]

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 // import { IS_AUTHENTICATED } from "../utils/constants";
 import { apiClient } from "../api/axios";
 
-const Notification = ({toggleNotifications}) => {
+const Notification = ({ toggleNotifications }) => {
     const [notifications, setNotifications] = useState([]);
     const empId = JSON.parse(localStorage.getItem("employee"))?.id;
 
@@ -51,27 +51,32 @@ const Notification = ({toggleNotifications}) => {
     };
 
     const updateNotificationsParams = (notification) => {
-        if (!notification)
-            return;
+        if (!notification) return;
+    
         const regex = /##[^#]+##/g;
         const matches = notification.content.match(regex);
         console.log(matches);
-
+    
         let keys = [];
-        matches.map((match) => {
-            keys.push(match.replaceAll("##", ""));
-        });
+        if (matches) {
+            matches.map((match) => {
+                keys.push(match.replaceAll("##", ""));
+            });
+        }
+    
         console.log(keys);
+    
         let updatedString = notification.content;
-        keys.map(
-            (key) =>
-            (updatedString = updatedString.replace(
+        keys.map((key) => {
+            updatedString = updatedString.replace(
                 "##" + key + "##",
                 notification.metaData[key]
-            ))
-        );
+            );
+        });
+    
         notification.content = updatedString;
     };
+    
 
     useEffect(() => {
         const getNotifications = () => {
@@ -89,20 +94,20 @@ const Notification = ({toggleNotifications}) => {
     }, []);
 
     return (
-            <div className="flex justify-end w-full ">
-                <div className="text-black border px-2 border-black/40 w-[30%] space-y-5 bg-white">
-                    <div className=" border-b py-3 flex justify-between items-center whitespace-nowrap px-5 text-black font-bold bg-white sticky top-0 z-10">
-                        <p>Notifications</p>
-                        <button className="font-bold hover:text-green-800" onClick={markAllNotificationRead}>
-                            View All
-                        </button>
-                    </div>
-                    <div className="overflow-auto h-[100dvh]">
-                        <ul className="space-y-2">
-                            {notifications.map(addUserIdInNotification)}
-                        </ul>
-                    </div>
+        <div className="flex justify-end w-full h-[100dvh]">
+            <div className="text-black border px-2 border-black/40 md:w-[30%] sm:w-[60%] space-y-5 bg-white">
+                <div className="h-[30px] border-b py-3 flex justify-between items-center whitespace-nowrap px-5 text-black font-bold bg-white sticky top-0 z-10">
+                    <p>Notifications</p>
+                    <button className="font-bold hover:text-green-800" onClick={markAllNotificationRead}>
+                        View All
+                    </button>
                 </div>
+                <div className="overflow-auto ">
+                    <ul className="space-y-2">
+                        {notifications.map(addUserIdInNotification)}
+                    </ul>
+                </div>
+            </div>
         </div>
     );
 };

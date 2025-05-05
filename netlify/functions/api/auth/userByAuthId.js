@@ -12,8 +12,10 @@ const userByAuthId = async (event) => {
 
     // Mock user data
     const users = [
-      { id: 2, authenticationId: 'auth_123', username: 'jane_doe', roles: ['ADMIN', 'MANAGER'] },
-      { id: 3, authenticationId: 'auth_456', username: 'john_doe', roles: ['DEFAULT'] },
+      { id: 2, authenticationId: 'auth_123', username: 'jane_doe', roles: ['ADMIN', 'MANAGER'], "firstName": "Jane",
+        "lastName": "Doe", },
+      { id: 3, authenticationId: 'auth_456', username: 'john_doe', roles: ['DEFAULT'], "firstName": "John",
+        "lastName": "Doe", },
     ];
 
     const user = users.find((user) => user.id === Number(authenticationId));

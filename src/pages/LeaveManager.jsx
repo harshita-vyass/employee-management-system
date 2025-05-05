@@ -1,10 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { apiClient } from "../api/axios";
-// const leaveStats = [
-//   { number: "36", text: "Leaves" },
-//   { number: "36", text: "Leaves" },
-//   { number: "36", text: "Leaves" },
-// ];
+import { formatDate, getLeaveTypeFromKey } from "../utils/common";
 
 const LeaveManager = () => {
   const [leaveStats, setLeaveStats] = useState();
@@ -12,10 +8,12 @@ const LeaveManager = () => {
   const [appliedLeaves, setAppliedLeaves] = useState([]);
   const [holidaysList, setHolidaysList] = useState([]);
   const [leaveTypes, setLeaveTypes] = useState([]);
+  const [isManager, setIsManager] = useState(false);
+  const [leavesForApproval, setLeavesForApproval] = useState([]);
   const leaveTypeRef = useRef();
   const startDateRef = useRef();
   const endDateRef = useRef();
-  const empId = JSON.parse(localStorage.getItem("employee")).id
+  const user = JSON.parse(localStorage.getItem("employee"))
 
   const handleData = (e) => {
     e.preventDefault();
@@ -27,7 +25,7 @@ const LeaveManager = () => {
       type: leaveTypeRef.current.value,
       startDate: startDateRef.current.value,
       endDate: endDateRef.current.value,
-      employeeId: empId,
+      employeeId: user.id,
       reason: "Casual Leave",
     };
 
@@ -42,9 +40,31 @@ const LeaveManager = () => {
       });
   };
 
-  useEffect(() => {
+  const handleLeaveStatus = (leaveId, action) => {
+    console.log("Leave id:" + leaveId, "Action :" + action);
     apiClient
-      .get("leaves/requests/" + empId)
+      .patch(`/leaves/requests/${leaveId}/${action}`)
+      .then(() => {
+        setLeavesForApproval((prev) =>
+          prev.filter((leave) => leave.id !== leaveId)
+        );
+        setAppliedLeaves((prev) =>
+          prev.map((leave) => {
+            if (leave.id === leaveId) {
+              leave.status = action;
+            }
+            return leave;
+          })
+        );
+      })
+      .catch((error) => console.error("Error on Leave Action:", error));
+  };
+
+  useEffect(() => {
+    const managerStatus = user?.roles.find(role => role === "MANAGER");
+    setIsManager(managerStatus);
+    apiClient
+      .get("leaves/requests/" + user.id,)
       .then((response) => {
         console.log(response);
         setAppliedLeaves(response);
@@ -52,11 +72,18 @@ const LeaveManager = () => {
       .catch((error) => {
         console.error(error);
       });
+
+    apiClient
+      .get("/leaves/requests/" + user.id + "/approval")
+      .then((response) => setLeavesForApproval(response))
+      .catch((error) =>
+        console.error("Error fetching leaves for approval:", error)
+      );
   }, [leaveUpdateTrigger]);
 
   useEffect(() => {
     apiClient
-      .get("leaves/balance/" + empId)
+      .get("leaves/balance/" + user.id,)
       .then((response) => {
         console.log(response);
         setLeaveStats(response);
@@ -177,8 +204,8 @@ const LeaveManager = () => {
               <tr key={item.id} className="text-left">
                 <td className="">{leaveTypes[item.type]}</td>
                 {/* <td className="">{JSON.parse(localStorage.getItem("leaveTypes"))[item.type]}</td> */}
-                <td className="">{item.startDate}</td>
-                <td className="">{item.endDate}</td>
+                <td className="">{formatDate(item.startDate)}</td>
+                <td className="">{formatDate(item.endDate)}</td>
                 <td className="">{item.leaveCount}</td>
                 <td className="">{item.status}</td>
               </tr>
@@ -186,6 +213,53 @@ const LeaveManager = () => {
           </tbody>
         </table>
       </div>
+
+      {isManager && (
+        <div className="bg-white shadow-md rounded-lg p-6 mb-6">
+          <h2 className="text-2xl font-bold text-green-600 mb-4">
+            Leaves for Approval
+          </h2>
+          <table className="w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="border p-2 bg-gray-200">Employee</th>
+                <th className="border p-2 bg-gray-200">Type</th>
+                <th className="border p-2 bg-gray-200">Start Date</th>
+                <th className="border p-2 bg-gray-200">End Date</th>
+                <th className="border p-2 bg-gray-200">Leave Days</th>
+                <th className="border p-2 bg-gray-200">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leavesForApproval.map((leave) => (
+                <tr key={leave.id}>
+                  <td className="border p-2">{leave.employeeId}</td>
+                  <td className="border p-2">
+                    {getLeaveTypeFromKey(leave.type)}
+                  </td>
+                  <td className="border p-2">{formatDate(leave.startDate)}</td>
+                  <td className="border p-2">{formatDate(leave.endDate)}</td>
+                  <td className="border p-2">{leave.leaveCount}</td>
+                  <td className="border p-2">
+                    <button
+                      onClick={() => handleLeaveStatus(leave.id, "APPROVE")}
+                      className="bg-green-600 text-white py-1 px-3 rounded-md shadow-sm hover:bg-green-700 mr-2"
+                    >
+                      Approve
+                    </button>
+                    <button
+                      onClick={() => handleLeaveStatus(leave.id, "REJECT")}
+                      className="bg-red-600 text-white py-1 px-3 rounded-md shadow-sm hover:bg-red-700"
+                    >
+                      Reject
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <div className="space-y-5">
         <h2 className="text-2xl font-bold text-black">Holiday Lists</h2>

@@ -5,6 +5,13 @@ const { designations } = require("./common/designations.js");
 const { filter } = require("./common/filters.js");
 const { holidays } = require("./common/holidays.js");
 const { leaveTypes } = require("./common/leaveTypes.js");
+const {
+  leaveStats,
+  leaveApply,
+  leaveRequest,
+  leaveRequestForApproval,
+} = require("./leaves/leaves.js");
+const { notification } = require("./notification/notifications.js");
 const { projects } = require("./projects/projects.js");
 const { users } = require("./users/users.js");
 
@@ -42,8 +49,25 @@ const handler = async (event) => {
       case "POST /clients":
         return await clients(event);
 
-        case "POST /users":
-          return await users(event);
+      case "POST /users":
+        return await users(event);
+
+      case "GET /leaves/balance/2":
+      case "GET /leaves/balance/3":
+        return await leaveStats(event);
+
+      case "POST /leaves/requests":
+        return await leaveApply(event);
+
+      case "GET /leaves/requests/2":
+      case "GET /leaves/requests/3":
+        return await leaveRequest(event);
+
+      case "GET /leaves/requests/2/approval":
+        return await leaveRequestForApproval(event);
+
+      case "GET /notifications/2":
+        return await notification(event);
 
       default:
         return {

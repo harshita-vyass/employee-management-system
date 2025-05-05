@@ -10,7 +10,7 @@ const projects = async (event) => {
   const businessUnitFilter = payload?.businessUnits;
   const search = payload?.search;
   const sort = payload?.sort;
-  
+
   console.log("sort", sort);
   console.log("projectFilter", projectFilter);
   console.log("clientFilter", clientFilter);
@@ -37,16 +37,14 @@ const projects = async (event) => {
   }
 
   // Sort
-  if (sort) {
-    const { sortBy, order } = sort;
-    filtered = filtered.sort((a, b) => {
-      if (order === "ASC") {
-        return a[sortBy] > b[sortBy] ? 1 : -1;
-      } else {
-        return a[sortBy] < b[sortBy] ? 1 : -1;
-      }
-    });
-  }
+  const { sortBy, order } = sort || { sortBy: "name", order: "ASC" };
+  filtered = filtered.sort((a, b) => {
+    if (order === "ASC") {
+      return a[sortBy] > b[sortBy] ? 1 : -1;
+    } else {
+      return a[sortBy] < b[sortBy] ? 1 : -1;
+    }
+  });
   console.log("filtered", filtered);
 
   // Pagination
@@ -62,15 +60,15 @@ const projects = async (event) => {
       items: paginated,
       meta: {
         sort: {
-          sortBy: "name",
-          order: "DESC",
+          sortBy: sort?.sortBy || "name",
+          order: sort?.order || "DESC",
         },
         pageRequest: {
           page: page,
           size: pageSize,
         },
-        totalItems: paginated.length,
-        totalPages: Math.ceil(paginated.length / pageSize),
+        totalItems: filtered.length,
+        totalPages: Math.ceil(filtered.length / pageSize),
         sortableParams: ["name", "startDate", "clientName", "employeeCount"],
       },
     }),
