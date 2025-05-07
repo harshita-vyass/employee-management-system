@@ -95,7 +95,7 @@ const Notification = ({ toggleNotifications }) => {
 
     return (
         <div className="flex justify-end w-full h-[100dvh]">
-            <div className="text-black border px-2 border-black/40 md:w-[30%] sm:w-[60%] space-y-5 bg-white">
+            <div className="text-black border px-2 border-black/40 md:w-[30%] w-[80%] space-y-5 bg-white">
                 <div className="h-[30px] border-b py-3 flex justify-between items-center whitespace-nowrap px-5 text-black font-bold bg-white sticky top-0 z-10">
                     <p>Notifications</p>
                     <button className="font-bold hover:text-green-800" onClick={markAllNotificationRead}>

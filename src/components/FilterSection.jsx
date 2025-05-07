@@ -50,7 +50,7 @@ const FilterSection = ({ openFilter, toggleFilter, applyFilters, pageName }) => 
               className="absolute bg-black/65 inset-0 "
               onClick={toggleFilter}
             ></div>
-            <div className="rounded-md text-black py-2  bg-white  w-[30%] mx-auto absolute right-0 h-[100dvh] z-[9999] overflow-y-auto flex flex-col justify-between">
+            <div className="rounded-md text-black py-2  bg-white  md:w-[30%] w-[80%] mx-auto absolute right-0 h-[100dvh] z-[9999] overflow-y-auto flex flex-col justify-between">
               <div className="space-y-3">
                 <h2 className="text-xl font-bold ml-5 mb-5 ">Filters</h2>
                 {filters()

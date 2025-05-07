@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -8,10 +8,11 @@ import MainLayout from "./layouts/MainLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import Projects from "./pages/Projects";
 import Clients from "./pages/Clients";
+import useAuthRedirect from "./hooks/useAuthRedirect";
 
 function App() {
+  useAuthRedirect(); 
   return (
-    <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<MainLayout />}>
@@ -28,7 +29,6 @@ function App() {
         </Route>
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
-    </BrowserRouter>
   );
 }
 

@@ -13,6 +13,11 @@ export const saveToLocalStorage = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 
+export const getDisplayName = () => {
+  return `${JSON.parse(localStorage.getItem("employee"))?.firstName} ${JSON.parse(localStorage.getItem("employee"))?.lastName
+    }`;
+};
+
 export const fetchDesignation = (id) => {
   console.log(id);
   const value = JSON.parse(localStorage.getItem("designation"))[id];

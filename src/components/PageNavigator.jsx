@@ -1,4 +1,5 @@
 import React from 'react'
+import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
 
 const PageNavigator = ({page, totalPages, setPage}) => {
 
@@ -10,22 +11,22 @@ const PageNavigator = ({page, totalPages, setPage}) => {
         }
     }
     return (
-        <div className="flex justify-between pt-5 items-center text-[13px] w-[95%]">
+        <div className="flex justify-between pt-5 items-center text-[13px] w-full">
             <button
-                className={`px-3 py-2 rounded-md bg-green-800 text-white ${page === 1 ? "cursor-not-allowed bg-green-800/70" : "cursor-pointer"}`}
+                className={`px-3 py-2 rounded-md bg-green-800 text-white flex items-center gap-1 ${page === 1 ? "cursor-not-allowed bg-green-800/70" : "cursor-pointer"}`}
                 onClick={() => handlePage(page - 1)} disabled={page === 1}
             >
-                Prev
+                <GrFormPrevious />  <span className='md:block hidden'>  Prev </span>
             </button>
             <p className="">
                 Showing Page {page} of {totalPages}
             </p>
             <button
-                className={`px-3 py-2 rounded-md bg-green-800 text-white ${page === totalPages ? "cursor-not-allowed bg-green-800/70" : "cursor-pointer"} `}
+                className={`px-3 py-2 rounded-md bg-green-800 text-white flex items-center gap-1 ${page === totalPages ? "cursor-not-allowed bg-green-800/70" : "cursor-pointer"} `}
                 onClick={() => handlePage(page + 1)}
                 disabled={page === totalPages}
             >
-                Next
+               <span className='md:block hidden'> Next </span> <GrFormNext />
             </button>
         </div>
     )

@@ -88,9 +88,8 @@ const Projects = () => {
           searchRef={searchRef}
           setPayload={setPayload}
         />
-
-        <div>
-          <div className="table-fixed text-black space-y-4">
+        <div className="overflow-x-auto whitespace-nowrap">
+          <table className=" text-black  w-full border-collapse">
             <HeaderList
               headersList={headersList}
               sort={sort}
@@ -98,25 +97,28 @@ const Projects = () => {
             />
             {projectList &&
               projectList.map((item) => (
-                <ul
+                <tbody
                   key={projectList.id}
-                  className="border-b-2 flex w-[95%] gap-5 justify-between whitespace-nowrap text-left"
+                  className="text-left"
                 >
-                  <li className=" min-w-52">{item.name}</li>
-                  <li className="min-w-32 ">{item.businessUnit}</li>
-                  <li className="min-w-24">{formatDate(item.startDate)}</li>
-                  <li className="min-w-24">{formatDate(item.endDate)}</li>
-                  <li className="min-w-40">{item.clientName}</li>
-                  <li className="min-w-40">{item.employeeCount}</li>
-                </ul>
+                  <tr>
+                    <td className="border p-2">{item.name}</td>
+                    <td className="border p-2">{item.businessUnit}</td>
+                    <td className="border p-2">{formatDate(item.startDate)}</td>
+                    <td className="border p-2">{formatDate(item.endDate)}</td>
+                    <td className="border p-2">{item.clientName}</td>
+                    <td className="border p-2">{item.employeeCount}</td>
+                  </tr>
+                </tbody>
               ))}
-          </div>
-          <PageNavigator
-            page={page}
-            totalPages={totalPages}
-            setPage={setPage}
-          />
+          </table>
         </div>
+        <PageNavigator
+          page={page}
+          totalPages={totalPages}
+          setPage={setPage}
+        />
+
       </div>
     </>
   );

@@ -8,37 +8,31 @@ import { ASC } from "../utils/constants";
 
 const headersList = [
     {
-        width: "52",
         title: "Name",
         keyName: "name",
         onClickFunc: true,
     },
     {
-        width: "32",
         title: "Since",
         keyName: "associationSince",
         onClickFunc: false,
     },
     {
-        width: "24",
         title: "Till",
         keyName: "associationTill",
         onClickFunc: true,
     },
     {
-        width: "24",
         title: "Revenue Potential",
         keyName: "revenuePotential",
         onClickFunc: false,
     },
     {
-        width: "40",
         title: "Status",
         keyName: "status",
         onClickFunc: true,
     },
     {
-        width: "40",
         title: "Region",
         keyName: "regionCode",
         onClickFunc: true,
@@ -89,36 +83,39 @@ const Clients = () => {
                     searchRef={searchRef}
                     setPayload={setPayload}
                 />
-                <div>
-                    <div className="table-fixed text-black space-y-4">
+                <div className="whitespace-nowrap overflow-auto">   
+                    <table className="text-black w-full border-collapse">
                         <HeaderList headersList={headersList} sort={sort} setSort={setSort} />
                         {clientList &&
                             clientList.map((item) => (
-                                <ul
+                                <tbody
                                     key={item.id}
-                                    className="border-b-2 flex w-[95%] gap-5 justify-between whitespace-nowrap text-left"
+                                    className=""
                                 >
-                                    <li className=" min-w-52">{item.name}</li>
-                                    <li className="min-w-24">
+                                    <tr>
+                                    <td className="border p-2">{item.name}</td>
+                                    <td className="border p-2">
                                         {formatDate(item.associationSince)}
-                                    </li>
-                                    <li className="min-w-24">
+                                    </td>
+                                    <td className="border p-2">
                                         {formatDate(item.associationTill)}
-                                    </li>
-                                    <li className="min-w-32 ">{item.revenuePotential}</li>
-                                    <li className="min-w-40">{item.status}</li>
-                                    <li className="min-w-40" title={item.regionName}>
+                                    </td>
+                                    <td className="border p-2 ">{item.revenuePotential}</td>
+                                    <td className="border p-2">{item.status}</td>
+                                    <td className="border p-2" title={item.regionName}>
                                         {item.regionCode}
-                                    </li>
-                                </ul>
+                                    </td>
+                                    </tr>
+                                </tbody>
                             ))}
+                    </table>
                     </div>
                     <PageNavigator
                         page={page}
                         totalPages={totalPages}
                         setPage={setPage}
                     />
-                </div>
+            
             </div>
         </>
     );

@@ -5,7 +5,7 @@ import PageNavigator from "../components/PageNavigator";
 import FilterInteraction from "../components/FilterInteraction";
 import HeaderList from "../components/HeaderList";
 import { ASC } from "../utils/constants";
-import {Loader} from "../components/Loader";
+import { Loader } from "../components/Loader";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -19,37 +19,31 @@ const Users = () => {
 
   const headersList = [
     {
-      width: "40",
       title: "Name",
       keyName: "name",
       onClickFunc: true,
     },
     {
-      width: "40",
       title: "Designation",
       keyName: "",
       onClickFunc: false,
     },
     {
-      width: "24",
       title: "DOB",
       keyName: "dob",
       onClickFunc: true,
     },
     {
-      width: "40",
       title: "Department",
       keyName: "Department",
       onClickFunc: false,
     },
     {
-      width: "24",
       title: "DOJ",
       keyName: "doj",
       onClickFunc: true,
     },
     {
-      width: "40",
       title: "Manager Name",
       keyName: "managerName",
       onClickFunc: true,
@@ -83,7 +77,7 @@ const Users = () => {
   };
   return (
     <>
-    {loading && <Loader /> }
+      {loading && <Loader />}
       <div className="space-y-5 pt-5 w-11/12  mx-auto">
         <FilterInteraction
           pageName={"userSearchPage"}
@@ -93,8 +87,9 @@ const Users = () => {
           searchRef={searchRef}
           setPayload={setPayload}
         />
-        <div>
-          <div className="table-fixed text-black space-y-4">
+
+        <div className="overflow-x-auto whitespace-nowrap">
+          <table className="w-full border-collapse">
             <HeaderList
               headersList={headersList}
               sort={sort}
@@ -102,27 +97,29 @@ const Users = () => {
             />
             {users &&
               users.map((user) => (
-                <ul
+                <tbody
                   key={user.id}
-                  className="border-b-2 flex w-[95%] gap-5 justify-between whitespace-nowrap text-left"
+                  className="text-left"
                 >
-                  <li className="capitalize max-w-40 min-w-40">{user.name}</li>
-                  <li className="max-w-40 min-w-40 !truncate">
-                    {user.designation}
-                  </li>
-                  <li className="max-w-24 min-w-24">{formatDate(user.dob)}</li>
-                  <li className="max-w-40 min-w-40">{user.department}</li>
-                  <li className="max-w-24 min-w-24">{formatDate(user.doj)}</li>
-                  <li className="max-w-40 min-w-40">{user.managerName}</li>
-                </ul>
+                  <tr>
+                    <td className="border p-2  capitalize ">{user.name}</td>
+                    <td className="border p-2  !truncate">
+                      {user.designation}
+                    </td>
+                    <td className="border p-2 ">{formatDate(user.dob)}</td>
+                    <td className="border p-2 ">{user.department}</td>
+                    <td className="border p-2 ">{formatDate(user.doj)}</td>
+                    <td className="border p-2 ">{user.managerName}</td>
+                  </tr>
+                </tbody>
               ))}
-          </div>
-          <PageNavigator
-            page={page}
-            totalPages={totalPages}
-            setPage={setPage}
-          />
+          </table>
         </div>
+        <PageNavigator
+          page={page}
+          totalPages={totalPages}
+          setPage={setPage}
+        />
       </div>
     </>
   );

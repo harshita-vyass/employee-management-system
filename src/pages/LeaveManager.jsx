@@ -115,18 +115,18 @@ const LeaveManager = () => {
   return (
 
     <div className=" mx-auto space-y-5 w-11/12 pt-10">
-      <div className="space-y-4 w-3/4">
+      <div className="space-y-4 w-full">
         <p className="text-2xl text-black font-bold">Leaves Statistics</p>
-        <div className="flex justify-between">
+        <div className="flex flex-wrap justify-between">
           {leaveStats &&
             Object.entries(leaveStats).map(([label, value], index) => {
               return (
                 <div
                   key={index}
-                  className="p-5 w-52 bg-green-800 rounded-md text-white space-y-3"
+                  className="p-4 md:w-[29%] w-[32%] md:flex items-center gap-4 bg-green-800 rounded-md text-white "
                 >
                   <p className="text-5xl text-center">{value}</p>
-                  <p className="text-center capitalize">{label} Leaves</p>
+                  <p className="text-lg capitalize md:text-left text-center">{label} Leaves</p>
                 </div>
               );
             })}
@@ -135,93 +135,106 @@ const LeaveManager = () => {
 
       <div className="text-black">
         <form className="w-full space-y-5" onSubmit={handleData}>
-          <div className="space-y-3">
-            <p className="text-2xl font-bold">Leave Type</p>
-            <div className="overflow-x-auto w-4/5">
-              <table className="min-w-full table-auto">
 
-                <tbody>
-                  <tr>
-                    <td className="px-4 py-2">Select Leave Type</td>
-                    <td className="px-4 py-2">
-                      <select ref={leaveTypeRef} className="bg-green-50 focus:outline-none">
-                        <option className="p-2">Select Leave Type</option>
-                        {Object.entries(leaveTypes).map(([label, value], index) => (
-                          <option key={index} value={label}>
-                            {value}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2">Start Date:</td>
-                    <td className="px-4 py-2">
-                      <input
-                        type="date"
-                        className="py-1.5 px-10 bg-green-50 rounded-xl"
-                        ref={startDateRef}
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2">End Date:</td>
-                    <td className="px-4 py-2">
-                      <input
-                        type="date"
-                        className="py-1.5 px-10 bg-green-50 rounded-xl"
-                        ref={endDateRef}
-                      />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <button className="px-5 !py-1.5 rounded-md bg-green-800 hover:bg-green-800/90 text-white mt-4">
-                Apply
-              </button>
+          <p className="text-2xl font-bold">Leave Type</p>
+          <div className="w-full">
+            <div className="flex flex-col md:flex-row md:items-center">
+              <label htmlFor="leaveType" className="md:w-1/3 md:px-4 py-2 font-medium">
+                Select Leave Type
+              </label>
+              <div className="md:w-2/3 md:px-4 py-2">
+                <select
+                  id="leaveType"
+                  ref={leaveTypeRef}
+                  className="bg-green-50 focus:outline-none w-full p-2 rounded"
+                >
+                  <option>Select Leave Type</option>
+                  {Object.entries(leaveTypes).map(([label, value], index) => (
+                    <option key={index} value={label}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
+            <div className="flex flex-col md:flex-row md:items-center">
+              <label htmlFor="startDate" className="md:w-1/3 md:px-4 py-2 font-medium">
+                Start Date:
+              </label>
+              <div className="md:w-2/3 md:px-4 py-2">
+                <input
+                  type="date"
+                  id="startDate"
+                  ref={startDateRef}
+                  className="py-1.5 px-3 bg-green-50 rounded-xl w-full outline-none"
+                />
+              </div>
+            </div>
 
+            <div className="flex flex-col md:flex-row md:items-center">
+              <label htmlFor="endDate" className="md:w-1/3 md:px-4 py-2 font-medium">
+                End Date:
+              </label>
+              <div className="md:w-2/3 md:px-4 py-2">
+                <input
+                  type="date"
+                  id="endDate"
+                  ref={endDateRef}
+                  className="py-1.5 px-5 bg-green-50 rounded-xl w-full outline-none"
+                />
+              </div>
+            </div>
+            <button className="px-5 !py-1.5 rounded-md bg-green-800 hover:bg-green-800/90 text-white mt-4">
+              Apply
+            </button>
           </div>
+
+
+
 
         </form>
       </div>
 
-      <div className="space-y-5" >
+      <div className="space-y-5 " >
         <h2 className="text-2xl font-bold text-black">Applied Leaves</h2>
-        <table className="text-black w-11/12 ">
-          <thead>
-            <tr className="text-left">
-              <th>Type</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Leave Count</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody >
-            {appliedLeaves.map((item) => (
-              <tr key={item.id} className="text-left">
-                <td className="">{leaveTypes[item.type]}</td>
-                {/* <td className="">{JSON.parse(localStorage.getItem("leaveTypes"))[item.type]}</td> */}
-                <td className="">{formatDate(item.startDate)}</td>
-                <td className="">{formatDate(item.endDate)}</td>
-                <td className="">{item.leaveCount}</td>
-                <td className="">{item.status}</td>
+        <div className="whitespace-nowrap overflow-auto">
+          <table className="text-black w-full border-collapse">
+            <thead>
+              <tr className="text-left">
+                <th className="border p-2 bg-gray-200">Type</th>
+                <th className="border p-2 bg-gray-200">Start Date</th>
+                <th className="border p-2 bg-gray-200">End Date</th>
+                <th className="border p-2 bg-gray-200">Leave Count</th>
+                <th className="border p-2 bg-gray-200">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody >
+              {appliedLeaves.map((item) => (
+                <tr key={item.id} className="text-left">
+                  <td className="border p-2">{leaveTypes[item.type]}</td>
+                  {/* <td className="">{JSON.parse(localStorage.getItem("leaveTypes"))[item.type]}</td> */}
+                  <td className="border p-2">{formatDate(item.startDate)}</td>
+                  <td className="border p-2">{formatDate(item.endDate)}</td>
+                  <td className="border p-2">{item.leaveCount}</td>
+                  <td className="border p-2">{item.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {isManager && (
-        <div className="bg-white shadow-md rounded-lg p-6 mb-6">
-          <h2 className="text-2xl font-bold text-green-600 mb-4">
+        <>
+        {/* // <div className="bg-white shadow-md rounded-lg p-6 mb-6"> */}
+          <h2 className="text-2xl font-bold text-black mb-4">
             Leaves for Approval
           </h2>
+          <div className="overflow-x-auto whitespace-nowrap">
           <table className="w-full border-collapse">
             <thead>
-              <tr>
+              <tr className="text-left">
                 <th className="border p-2 bg-gray-200">Employee</th>
                 <th className="border p-2 bg-gray-200">Type</th>
                 <th className="border p-2 bg-gray-200">Start Date</th>
@@ -243,13 +256,13 @@ const LeaveManager = () => {
                   <td className="border p-2">
                     <button
                       onClick={() => handleLeaveStatus(leave.id, "APPROVE")}
-                      className="bg-green-600 text-white py-1 px-3 rounded-md shadow-sm hover:bg-green-700 mr-2"
+                      className="border-green-800 border-2 text-black py-1 w-24  hover:text-white rounded-md shadow-sm hover:bg-green-800 mr-2"
                     >
                       Approve
                     </button>
                     <button
                       onClick={() => handleLeaveStatus(leave.id, "REJECT")}
-                      className="bg-red-600 text-white py-1 px-3 rounded-md shadow-sm hover:bg-red-700"
+                      className="border-red-800 border-2 text-black py-1 w-24  hover:text-white rounded-md shadow-sm hover:bg-red-800"
                     >
                       Reject
                     </button>
@@ -258,27 +271,31 @@ const LeaveManager = () => {
               ))}
             </tbody>
           </table>
-        </div>
+          </div>
+          </>
+        // </div>
       )}
 
       <div className="space-y-5">
         <h2 className="text-2xl font-bold text-black">Holiday Lists</h2>
-        <table className="text-black text-left w-1/2">
+        <div className="overflow-x-auto whitespace-nowrap">
+        <table className="text-black text-left w-full">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Description</th>
+              <th className="border p-2 bg-gray-200">Date</th>
+              <th className="border p-2 bg-gray-200">Description</th>
             </tr>
           </thead>
           <tbody>
             {holidaysList.map((item) => (
               <tr key={item.id}>
-                <td className="">{item.holidayDate}</td>
-                <td className="">{item.description}</td>
+                <td className="border p-2">{item.holidayDate}</td>
+                <td className="border p-2">{item.description}</td>
               </tr>
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

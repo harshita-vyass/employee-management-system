@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 import { FaFilter } from "react-icons/fa";
 import FilterSection from '../components/FilterSection';
+import { IoSearchSharp } from "react-icons/io5";
+import { BsSearch } from "react-icons/bs";
 
 const FilterInteraction = ({ functionName, setPage, page, searchRef, setPayload, pageName }) => {
     const [openFilter, setOpenFilter] = useState(false);
@@ -28,25 +30,28 @@ const FilterInteraction = ({ functionName, setPage, page, searchRef, setPayload,
     }
     return (
         <>
-            <div className="w-4/5 flex gap-2 ">
-                <input
-                    ref={searchRef}
-                    type="text"
-                    className="bg-transparent border p-2 rounded-md"
-                    placeholder="Search..."
-                />
-                <button
-                    className="px-1.5 py-1 rounded-md bg-green-800 text-white hover:bg-green-800/80"
-                    onClick={handleSearch}
-                >
-                    Search
-                </button>
+            <div className="w-full flex flex-wrap justify-between gap-2 ">
+                <div className="flex gap-2 flex-wrap">
+                    <input
+                        ref={searchRef}
+                        type="text"
+                        className="bg-transparent border p-2 rounded-md md:w-[300px]"
+                        placeholder="Search..."
+                    />
+                    <button
+                        className="px-3 py-2 rounded-md bg-green-800 text-white hover:bg-green-800/80 flex items-center gap-2"
+                        onClick={handleSearch}
+                    >
+                    <BsSearch />  <span className="md:block hidden">Search</span>
+                    </button>
+                </div>
                 <button
                     onClick={toggleFilter}
-                    className="flex gap-1 items-center bg-green-800 text-white hover:bg-green-800/80 rounded-md px-1.5 py-1"
+                    className="flex gap-1 items-center bg-green-800 text-white hover:bg-green-800/80 rounded-md px-3 py-2"
                 >
-                    <FaFilter /> Filters
+                    <FaFilter /> <span className="md:block hidden">Filters</span>
                 </button>
+                
             </div>
             <FilterSection openFilter={openFilter} toggleFilter={toggleFilter} applyFilters={handleFilter} pageName={pageName} />
 

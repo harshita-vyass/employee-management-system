@@ -1,11 +1,10 @@
 import React, {  } from "react";
 import { getStringFromLocalStorage } from "../utils/common";
 import { Link } from "react-router-dom";
-// import { IS_AUTHENTICATED } from "../utils/constants";
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-green-50 text-green-900 p-6">
+    <div className="min-h-screen text-green-900 p-6">
       <header className="text-center mb-8">
         <h1 className="text-4xl font-bold text-black ">Leave Management System</h1>
         <p className=" mt-2 text-black">Manage your time off easily and efficiently</p>
