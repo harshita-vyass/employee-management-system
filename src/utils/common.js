@@ -27,13 +27,11 @@ export const fetchDesignation = (id) => {
 
 export const formatDate = (date) => {
   date = new Date(date);
+  if (date.toString() === "Invalid Date") {
+    return '-';
+  }
   return date.toLocaleDateString("en-GB", DATE_FORMAT);
 
-  // const day = date.getDate();
-  // const month = date.toLocaleString("en-US", { month: "long" });
-  // const year = date.getFullYear();
-
-  // const formattedDate = `${day} ${month}, ${year}`;
 };
 
 export const getLeaveTypeFromKey = (value) => {

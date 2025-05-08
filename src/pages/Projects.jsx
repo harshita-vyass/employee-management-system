@@ -3,7 +3,7 @@ import { apiClient } from "../api/axios";
 import { formatDate } from "../utils/common";
 import { BiSort } from "react-icons/bi";
 import PageNavigator from "../components/PageNavigator";
-
+import { Loader } from "../components/Loader";
 import FilterInteraction from "../components/FilterInteraction";
 import { ASC } from "../utils/constants";
 import HeaderList from "../components/HeaderList";
@@ -54,10 +54,12 @@ const Projects = () => {
   const [payload, setPayload] = useState({});
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
   const size = 5;
 
   useEffect(() => {
     getProjects();
+    setTimeout(() => setLoading(false), 500);
   }, [page, payload, sort]);
 
   const getProjects = () => {
@@ -79,6 +81,7 @@ const Projects = () => {
 
   return (
     <>
+      {loading && <Loader />}
       <div className="space-y-5 pt-5 w-11/12  mx-auto">
         <FilterInteraction
           pageName={"projectSearchPage"}
@@ -95,7 +98,7 @@ const Projects = () => {
               sort={sort}
               setSort={setSort}
             />
-            {projectList &&
+            {projectList && projectList.length > 0 ?
               projectList.map((item) => (
                 <tbody
                   key={projectList.id}
@@ -110,7 +113,7 @@ const Projects = () => {
                     <td className="border p-2">{item.employeeCount}</td>
                   </tr>
                 </tbody>
-              ))}
+              )):<tr><td colSpan={6} className="border p-2 text-center">No Data Found</td></tr>}
           </table>
         </div>
         <PageNavigator

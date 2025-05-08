@@ -95,7 +95,7 @@ const Users = () => {
               sort={sort}
               setSort={setSort}
             />
-            {users &&
+            {users && users.length > 0 ?
               users.map((user) => (
                 <tbody
                   key={user.id}
@@ -112,7 +112,7 @@ const Users = () => {
                     <td className="border p-2 ">{user.managerName}</td>
                   </tr>
                 </tbody>
-              ))}
+              )):<tr><td colSpan={6} className="border p-2 text-center">No Data Found</td></tr>}
           </table>
         </div>
         <PageNavigator

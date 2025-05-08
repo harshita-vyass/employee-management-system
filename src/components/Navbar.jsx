@@ -5,10 +5,10 @@ import { IoNotificationsCircle } from "react-icons/io5";
 import { FaHome } from "react-icons/fa";
 import { SlCalender } from "react-icons/sl";
 import { TbUserSearch } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
 import Notification from './Notification';
 import { GrProjects } from 'react-icons/gr';
 import { getDisplayName } from '../utils/common';
+import Logout from './Logout';
 
 const links = [
   { to: "/", icon: <FaHome />, label: "Home" },
@@ -18,24 +18,47 @@ const links = [
   { to: "/admin/clients", icon: <FaUsers />, label: "Clients" }
 ];
 const Navbar = () => {
-  const [open, setIsOpened] = useReducer((flag) => !flag, false);
+  const [open, setIsOpened] = useState(false);
   const [openNotifications, toggleNotifications] = useReducer((flag) => !flag, false)
   const [showSidebar, toggleShowSidebar] = useReducer((flag) => !flag, false)
+  const [openConfirmLogout, toggleConfirmLogout] = useReducer(flag => !flag, false)
 
-  const navigate = useNavigate();
+  const toggleOpen = () => {
+    setIsOpened(prev => !prev);
+  };
+
+  const closeNavbar = () => {
+    setIsOpened(false);
+    toggleShowSidebar();
+  }
+
 
   const handleLogOut = () => {
-    alert("You were logged out")
-    localStorage.clear();
-    navigate('/login');
+    console.log("logged out")
+    toggleConfirmLogout();
+    closeNavbar()
   };
 
   return (
     <>
+      {showSidebar && (
+        <div
+          onClick={closeNavbar}
+          className="fixed inset-0 bg-black/30  z-30 transition-opacity duration-300"
+        />
+      )}
+
+      {openNotifications && (
+        <div
+          onClick={toggleNotifications}
+          className="fixed inset-0 bg-black/30  z-30 transition-opacity duration-300"
+        />
+      )}
+
       <div className='md:hidden bg-green-800 w-full h-[40px] fixed z-50 flex justify-between items-center px-2'>
         <button
           className="  text-white  rounded"
-          onClick={toggleShowSidebar}
+          onClick={closeNavbar}
         >
           <svg
             className="w-6 h-6"
@@ -74,9 +97,7 @@ const Navbar = () => {
                 toggleNotifications();
                 toggleShowSidebar();
               }}><IoNotificationsCircle size={28} /></button>
-
-
-              <button onClick={(e) => { e.stopPropagation(); setIsOpened(); }}>
+              <button onClick={(e) => { e.stopPropagation(); toggleOpen(); }}>
                 <FaRegCircleUser size={21} className='ml-2' />
               </button>
               {open && (
@@ -92,7 +113,7 @@ const Navbar = () => {
 
                   </div>
                   <div>
-                    <p onClick={handleLogOut} className='cursor-pointer  hover:text-green-800 text-base'>Logout</p>
+                    <p onClick={handleLogOut} className='cursor-pointer hover:text-green-800 text-base'>Logout</p>
                   </div>
                 </div>
               )}
@@ -107,6 +128,9 @@ const Navbar = () => {
           `}>
         <Notification />
       </div>}
+
+
+      {openConfirmLogout && <Logout toggleLogout={toggleConfirmLogout} />}
 
     </>
   )

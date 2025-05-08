@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Drawer from "./Drawer";
+import { IoClose } from "react-icons/io5";
 
 const FilterSection = ({ openFilter, toggleFilter, applyFilters, pageName }) => {
   const [filterValue, setFilterValue] = useState({});
@@ -24,16 +25,17 @@ const FilterSection = ({ openFilter, toggleFilter, applyFilters, pageName }) => 
       });
     } else {
       console.log("unchecked")
-      setFilterValue((prev) => { 
+      setFilterValue((prev) => {
         const updatedValue = prev[key].filter((pre) => pre !== value)
         if (updatedValue.length === 0) {
           delete prev[key]
           return prev
         }
         return {
-        ...prev,
-        [key]: updatedValue
-      }}
+          ...prev,
+          [key]: updatedValue
+        }
+      }
       );
     }
 
@@ -51,8 +53,13 @@ const FilterSection = ({ openFilter, toggleFilter, applyFilters, pageName }) => 
               onClick={toggleFilter}
             ></div>
             <div className="rounded-md text-black py-2  bg-white  md:w-[30%] w-[80%] mx-auto absolute right-0 h-[100dvh] z-[9999] overflow-y-auto flex flex-col justify-between">
-              <div className="space-y-3">
-                <h2 className="text-xl font-bold ml-5 mb-5 ">Filters</h2>
+              <div className="space-y-3 ">
+                <div className="flex justify-between items-center px-5 ">
+                  <h2 className="text-xl font-bold ">Filters</h2>
+                  <p onClick={() => {
+                  applyFilters(filterValue);
+                }}><IoClose /></p>
+                </div>
                 {filters()
                   .filter(elem => elem.applicablePages.includes(pageName))
                   .map((elem, index) => (

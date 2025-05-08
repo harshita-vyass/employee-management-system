@@ -95,14 +95,15 @@ const Notification = ({ toggleNotifications }) => {
 
     return (
         <div className="flex justify-end w-full h-[100dvh]">
-            <div className="text-black border px-2 border-black/40 md:w-[30%] w-[80%] space-y-5 bg-white">
-                <div className="h-[30px] border-b py-3 flex justify-between items-center whitespace-nowrap px-5 text-black font-bold bg-white sticky top-0 z-10">
+            <div className="text-black py-2 border-black/40 md:w-[30%] w-[80%] space-y-5 bg-white ">
+               
+                <div className=" px-5 flex justify-between items-center whitespace-nowrap  text-black font-bold bg-white sticky top-0 z-10">
                     <p>Notifications</p>
-                    <button className="font-bold hover:text-green-800" onClick={markAllNotificationRead}>
+                    <button className="font-semibold text-white bg-green-800 cursor-pointer p-1.5 rounded text-sm" onClick={markAllNotificationRead}>
                         View All
                     </button>
                 </div>
-                <div className="overflow-auto ">
+                <div className="overflow-auto max-h-[80dvh]">
                     <ul className="space-y-2">
                         {notifications.map(addUserIdInNotification)}
                     </ul>

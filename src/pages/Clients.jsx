@@ -5,6 +5,7 @@ import HeaderList from "../components/HeaderList";
 import { apiClient } from "../api/axios";
 import { formatDate } from "../utils/common";
 import { ASC } from "../utils/constants";
+import { Loader } from "../components/Loader";
 
 const headersList = [
     {
@@ -46,10 +47,12 @@ const Clients = () => {
     const [payload, setPayload] = useState({});
     const [sort, setSort] = useState({ sortBy: "", order: ASC });
     const searchRef = useRef("");
+    const [loading, setLoading] = useState(true);
     const size = 5;
 
     useEffect(() => {
         getClients(page)
+        setTimeout(() => setLoading(false), 500);
     }, [page, payload, sort]);
 
     const getClients = (page) => {
@@ -74,6 +77,7 @@ const Clients = () => {
 
     return (
         <>
+        {loading && <Loader />}
             <div className="space-y-5 pt-5 w-11/12  mx-auto">
                 <FilterInteraction
                     pageName={"clientSearchPage"}
@@ -86,7 +90,7 @@ const Clients = () => {
                 <div className="whitespace-nowrap overflow-auto">   
                     <table className="text-black w-full border-collapse">
                         <HeaderList headersList={headersList} sort={sort} setSort={setSort} />
-                        {clientList &&
+                        {clientList && clientList.length > 0 ?
                             clientList.map((item) => (
                                 <tbody
                                     key={item.id}
@@ -107,7 +111,7 @@ const Clients = () => {
                                     </td>
                                     </tr>
                                 </tbody>
-                            ))}
+                            )):<tr><td colSpan={6} className="border p-2 text-center">No Data Found</td></tr>}
                     </table>
                     </div>
                     <PageNavigator

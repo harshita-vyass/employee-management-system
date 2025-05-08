@@ -44,15 +44,15 @@ const Login = () => {
         localStorage.setItem("designation", JSON.stringify(response))
       })
       .catch((error) => console.error(error))
-  } 
+  }
 
   const filterAllByCategory = () => {
     apiClient.get("filters")
-    .then((response)=>{
-    console.log(response)
-    localStorage.setItem("filters",JSON.stringify(response))
-  })
-    .catch((error)=>(console.error(error)))
+      .then((response) => {
+        console.log(response)
+        localStorage.setItem("filters", JSON.stringify(response))
+      })
+      .catch((error) => (console.error(error)))
   }
 
   const saveLoginResponseToLocalStorage = (response) => {
@@ -60,62 +60,58 @@ const Login = () => {
   }
 
   return (
-    <div>
-      <section className="bg-green-800">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-                <div>
-                  <label
-                    for="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 "
-                  >
-                    Your email
-                  </label>
-                  <input
-                    ref={emailRef}
-                    type="text"
-                    name="email"
-                    id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5 focus:outline focus:outline-green-700 focus:outline-2"
-                    placeholder="name@company.com"
-                    required=""
-                  />
-                </div>
-                <div>
-                  <label
-                    for="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 "
-                  >
-                    Password
-                  </label>
-                  <input
-                    ref={passRef}
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg  block w-full p-2.5 focus:outline focus:outline-green-700 focus:outline-2"
-                    required=""
-                  />
-                </div>
-               
-                <button
-                  type="submit"
-                  className="w-full text-white bg-green-800 hover:bg-green-800/90  font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                >
-                  Sign in
-                </button>
-                <div className="flex justify-end hover:text-green-800 cursor-pointer">
-                <p className="">Forgot password?</p>
-              </div>
-              </form>
+    <section className="bg-green-800 h-[100dvh] flex items-center">
+      <div className="w-11/12 mx-auto bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
+        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+            <div>
+              <label
+                for="email"
+                className="block mb-2 text-sm font-medium text-gray-900 "
+              >
+                Your email
+              </label>
+              <input
+                ref={emailRef}
+                type="text"
+                name="email"
+                id="email"
+                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5 focus:outline focus:outline-green-700 focus:outline-2"
+                placeholder="name@company.com"
+                required=""
+              />
             </div>
-          </div>
+            <div>
+              <label
+                for="password"
+                className="block mb-2 text-sm font-medium text-gray-900 "
+              >
+                Password
+              </label>
+              <input
+                ref={passRef}
+                type="password"
+                name="password"
+                id="password"
+                placeholder="••••••••"
+                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg  block w-full p-2.5 focus:outline focus:outline-green-700 focus:outline-2"
+                required=""
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full text-white bg-green-800 hover:bg-green-800/90  font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Sign in
+            </button>
+            <div className="flex justify-end hover:text-green-800 cursor-pointer">
+              <p className="">Forgot password?</p>
+            </div>
+          </form>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 
