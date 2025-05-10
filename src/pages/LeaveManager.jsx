@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { apiClient } from "../api/axios";
-import { formatDate, getLeaveTypeFromKey } from "../utils/common";
+import { formatDate } from "../utils/common";
+import { Loader } from "../components/Loader";
 
 const LeaveManager = () => {
   const [leaveStats, setLeaveStats] = useState();
@@ -14,6 +15,7 @@ const LeaveManager = () => {
   const startDateRef = useRef();
   const endDateRef = useRef();
   const user = JSON.parse(localStorage.getItem("employee"))
+  const [loading, setLoading] = useState(true);
 
   const handleData = (e) => {
     e.preventDefault();
@@ -76,6 +78,7 @@ const LeaveManager = () => {
   }, [leaveUpdateTrigger]);
 
   useEffect(() => {
+    setTimeout(() => setLoading(false), 500);
     apiClient
       .get("leaves/balance/" + user.id,)
       .then((response) => {
@@ -98,15 +101,17 @@ const LeaveManager = () => {
       .get("constants/leaveTypes")
       .then((response) => {
         setLeaveTypes(response);
-        // localStorage.setItem("leaveTypes", JSON.stringify(response));
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
 
-  return (
+  if (loading) {
+    return <Loader />
+  }
 
+  return (
     <div className=" mx-auto space-y-5 w-11/12 pt-10">
       <div className="space-y-4 w-full">
         <p className="text-2xl text-black font-bold">Leaves Statistics</p>
@@ -224,69 +229,69 @@ const LeaveManager = () => {
             Leaves for Approval
           </h2>
           <div className="overflow-x-auto whitespace-nowrap">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="text-left">
-                <th className="border p-2 bg-gray-200">Employee</th>
-                <th className="border p-2 bg-gray-200">Type</th>
-                <th className="border p-2 bg-gray-200">Start Date</th>
-                <th className="border p-2 bg-gray-200">End Date</th>
-                <th className="border p-2 bg-gray-200">Leave Days</th>
-                <th className="border p-2 bg-gray-200">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {leavesForApproval.map((leave) => (
-                <tr key={leave.id}>
-                  <td className="border p-2">{leave.employeeId}</td>
-                  <td className="border p-2">
-                    {leaveTypes[leave.type]}
-                  </td>
-                  <td className="border p-2">{formatDate(leave.startDate)}</td>
-                  <td className="border p-2">{formatDate(leave.endDate)}</td>
-                  <td className="border p-2">{leave.leaveCount}</td>
-                  <td className="border p-2">
-                    <button
-                      onClick={() => handleLeaveStatus(leave.id, "APPROVE")}
-                      className="border-green-800 border-2 text-black py-1 w-24  hover:text-white rounded-md shadow-sm hover:bg-green-800 mr-2"
-                    >
-                      Approve
-                    </button>
-                    <button
-                      onClick={() => handleLeaveStatus(leave.id, "REJECT")}
-                      className="border-red-800 border-2 text-black py-1 w-24  hover:text-white rounded-md shadow-sm hover:bg-red-800"
-                    >
-                      Reject
-                    </button>
-                  </td>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="text-left">
+                  <th className="border p-2 bg-gray-200">Employee</th>
+                  <th className="border p-2 bg-gray-200">Type</th>
+                  <th className="border p-2 bg-gray-200">Start Date</th>
+                  <th className="border p-2 bg-gray-200">End Date</th>
+                  <th className="border p-2 bg-gray-200">Leave Days</th>
+                  <th className="border p-2 bg-gray-200">Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {leavesForApproval.map((leave) => (
+                  <tr key={leave.id}>
+                    <td className="border p-2">{leave.employeeId}</td>
+                    <td className="border p-2">
+                      {leaveTypes[leave.type]}
+                    </td>
+                    <td className="border p-2">{formatDate(leave.startDate)}</td>
+                    <td className="border p-2">{formatDate(leave.endDate)}</td>
+                    <td className="border p-2">{leave.leaveCount}</td>
+                    <td className="border p-2">
+                      <button
+                        onClick={() => handleLeaveStatus(leave.id, "APPROVE")}
+                        className="border-green-800 border-2 text-black py-1 w-24  hover:text-white rounded-md shadow-sm hover:bg-green-800 mr-2"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => handleLeaveStatus(leave.id, "REJECT")}
+                        className="border-red-800 border-2 text-black py-1 w-24  hover:text-white rounded-md shadow-sm hover:bg-red-800"
+                      >
+                        Reject
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          </>
+        </>
         // </div>
       )}
 
       <div className="space-y-5">
         <h2 className="text-2xl font-bold text-black">Holiday Lists</h2>
         <div className="overflow-x-auto whitespace-nowrap">
-        <table className="text-black text-left w-full">
-          <thead>
-            <tr>
-              <th className="border p-2 bg-gray-200">Date</th>
-              <th className="border p-2 bg-gray-200">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {holidaysList.map((item) => (
-              <tr key={item.id}>
-                <td className="border p-2">{item.holidayDate}</td>
-                <td className="border p-2">{item.description}</td>
+          <table className="text-black text-left w-full">
+            <thead>
+              <tr>
+                <th className="border p-2 bg-gray-200">Date</th>
+                <th className="border p-2 bg-gray-200">Description</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {holidaysList.map((item) => (
+                <tr key={item.id}>
+                  <td className="border p-2">{item.holidayDate}</td>
+                  <td className="border p-2">{item.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

@@ -9,9 +9,9 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      setTimeout(() => {
-        alert("Credentials are prefilled for demo purpose. Please proceed with the login.")
-  
+    setTimeout(() => {
+      alert("Credentials are prefilled for demo purpose. Please proceed with the login.")
+
     }, 1000);
     emailRef.current.value = "jane_doe"
     passRef.current.value = "password"
@@ -23,42 +23,50 @@ const Login = () => {
       .then((response) => {
         saveLoginResponseToLocalStorage(response)
         localStorage.setItem(IS_AUTHENTICATED, true);
-        fetchUserDetails();
-        navigate('/');
-      }).catch((error) => {
+        fetchAppData();
+      })
+      .then(() => {
+        navigate('/')
+      })
+      .catch((error) => {
         console.error("error: ", error);
       });
   };
 
-
-
-  const fetchUserDetails = () => {
-    apiClient
-      .get("user", { authenticationId: localStorage.getItem("id") })
-      .then((response) => {
-        localStorage.setItem("employee", JSON.stringify(response))
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    getDesignation()
-    filterAllByCategory()
+  const fetchAppData = () => {
+    return Promise.all([
+      fetchUserDetails(),
+      getDesignation(),
+      filterAllByCategory(),
+    ]);
   }
 
-  const getDesignation = () => {
-    apiClient.get("constants/designations")
-      .then((response) => {
-        localStorage.setItem("designation", JSON.stringify(response))
-      })
-      .catch((error) => console.error(error))
+  const fetchUserDetails = async () => {
+    try {
+      const response = await apiClient
+        .get("user", { authenticationId: localStorage.getItem("id") });
+      localStorage.setItem("employee", JSON.stringify(response));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  const filterAllByCategory = () => {
-    apiClient.get("filters")
-      .then((response) => {
-        localStorage.setItem("filters", JSON.stringify(response))
-      })
-      .catch((error) => (console.error(error)))
+  const getDesignation = async () => {
+    try {
+      const response = await apiClient.get("constants/designations");
+      localStorage.setItem("designation", JSON.stringify(response));
+    } catch (error) {
+      return console.error(error);
+    }
+  }
+
+  const filterAllByCategory = async () => {
+    try {
+      const response = await apiClient.get("filters");
+      localStorage.setItem("filters", JSON.stringify(response));
+    } catch (error) {
+      return (console.error(error));
+    }
   }
 
   const saveLoginResponseToLocalStorage = (response) => {

@@ -77,9 +77,6 @@ const Navbar = () => {
             />
           </svg>
         </button>
-        <p className='font-semibold text-white'>
-          {getStringFromLocalStorage('employee')?.firstName}
-        </p>
       </div>
       <div className={`bg-green-800 lg:w-[15%] sm:w-[30%] w-[50%] h-[100vh] fixed z-40
        transition-transform duration-300 ease-in-out
