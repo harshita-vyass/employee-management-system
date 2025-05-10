@@ -35,5 +35,10 @@ export const formatDate = (date) => {
 };
 
 export const getLeaveTypeFromKey = (value) => {
-  return JSON.parse(localStorage.getItem("leaveTypes"))[value];
+  try {
+  return JSON.parse(localStorage.getItem("leaveTypes"))[value]; 
+} catch (error) {
+  console.error("Error parsing leave types from local storage:", error);
+  return null;
+}
 };

@@ -26,8 +26,8 @@ const FilterSection = ({ openFilter, toggleFilter, applyFilters, pageName }) => 
     } else {
       console.log("unchecked")
       setFilterValue((prev) => {
-        const updatedValue = prev[key].filter((pre) => pre !== value)
-        if (updatedValue.length === 0) {
+        const updatedValue = prev[key]?.filter((pre) => pre !== value)
+        if (updatedValue?.length === 0) {
           delete prev[key]
           return prev
         }
@@ -42,7 +42,12 @@ const FilterSection = ({ openFilter, toggleFilter, applyFilters, pageName }) => 
 
   };
 
+
   const filters = () => JSON.parse(localStorage.getItem("filters"));
+
+ const resetFilter = () => {
+    setFilterValue({});
+  }
   return (
     <>
       <div className="relative inline-block ">
@@ -52,13 +57,13 @@ const FilterSection = ({ openFilter, toggleFilter, applyFilters, pageName }) => 
               className="absolute bg-black/65 inset-0 "
               onClick={toggleFilter}
             ></div>
-            <div className="rounded-md text-black py-2  bg-white  md:w-[30%] w-[80%] mx-auto absolute right-0 h-[100dvh] z-[9999] overflow-y-auto flex flex-col justify-between">
+            <div className="rounded-md text-black py-2  bg-white  lg:w-[30%] md:w-[60%] w-[80%] mx-auto absolute right-0 h-[100dvh] z-[9999] overflow-y-auto flex flex-col justify-between">
               <div className="space-y-3 ">
-                <div className="flex justify-between items-center px-5 ">
+                <div className="flex justify-between items-center xl:px-5 px-2 ">
                   <h2 className="text-xl font-bold ">Filters</h2>
-                  <p onClick={() => {
-                  applyFilters(filterValue);
-                }}><IoClose /></p>
+                  <p className="cursor-pointer" onClick={() => {
+                    applyFilters(filterValue);
+                  }}><IoClose size={25} /></p>
                 </div>
                 {filters()
                   .filter(elem => elem.applicablePages.includes(pageName))
@@ -73,14 +78,25 @@ const FilterSection = ({ openFilter, toggleFilter, applyFilters, pageName }) => 
                     </div>
                   ))}
               </div>
-              <button
-                className="text-white bg-green-800 w-[96%] py-2 mx-auto mt-5"
-                onClick={() => {
-                  applyFilters(filterValue);
-                }}
-              >
-                Apply
-              </button>
+              <div className="flex justify-between items-center w-full mx-auto">
+                <button
+                  className="text-white bg-green-800 w-[48%] py-2 mx-auto mt-5"
+                  onClick={() => {
+                    applyFilters(filterValue);
+                  }}
+                >
+                  Apply
+                </button>
+                <button
+                  className="text-white bg-black w-[48%] py-2 mx-auto mt-5"
+                  onClick={() => {
+                    resetFilter();
+                    applyFilters({});
+                  }}
+                >
+                  Reset
+                </button>
+              </div>
             </div>
           </div>
         )}

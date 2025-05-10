@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { authClient, apiClient } from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { IS_AUTHENTICATED } from "../utils/constants";
@@ -8,11 +8,19 @@ const Login = () => {
   const passRef = useRef();
   const navigate = useNavigate();
 
+  useEffect(() => {
+      setTimeout(() => {
+        alert("Credentials are prefilled for demo purpose. Please proceed with the login.")
+  
+    }, 1000);
+    emailRef.current.value = "jane_doe"
+    passRef.current.value = "password"
+  }, [])
+
   const handleSubmit = (e) => {
     e.preventDefault();
     authClient.post('auth/login', { username: emailRef.current.value, password: passRef.current.value })
       .then((response) => {
-        console.log(response);
         saveLoginResponseToLocalStorage(response)
         localStorage.setItem(IS_AUTHENTICATED, true);
         fetchUserDetails();
@@ -40,7 +48,6 @@ const Login = () => {
   const getDesignation = () => {
     apiClient.get("constants/designations")
       .then((response) => {
-        console.log(response)
         localStorage.setItem("designation", JSON.stringify(response))
       })
       .catch((error) => console.error(error))
@@ -49,7 +56,6 @@ const Login = () => {
   const filterAllByCategory = () => {
     apiClient.get("filters")
       .then((response) => {
-        console.log(response)
         localStorage.setItem("filters", JSON.stringify(response))
       })
       .catch((error) => (console.error(error)))
@@ -59,14 +65,17 @@ const Login = () => {
     Object.entries(response).map(([key, value], index) => localStorage.setItem(key, JSON.stringify(value)))
   }
 
+
+
   return (
-    <section className="bg-green-800 h-[100dvh] flex items-center">
+    <section className="bg-green-800 h-[100dvh] flex flex-col items-center gap-4 justify-center">
       <div className="w-11/12 mx-auto bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <h2 className="text-3xl text-center  ">Login</h2>
           <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
-                for="email"
+                htmlFor="email"
                 className="block mb-2 text-sm font-medium text-gray-900 "
               >
                 Your email
@@ -83,7 +92,7 @@ const Login = () => {
             </div>
             <div>
               <label
-                for="password"
+                htmlFor="password"
                 className="block mb-2 text-sm font-medium text-gray-900 "
               >
                 Password
@@ -103,12 +112,14 @@ const Login = () => {
               type="submit"
               className="w-full text-white bg-green-800 hover:bg-green-800/90  font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-              Sign in
+              Log in
             </button>
-            <div className="flex justify-end hover:text-green-800 cursor-pointer">
-              <p className="">Forgot password?</p>
-            </div>
+
           </form>
+
+          <div className="flex justify-end  ">
+            <button className="cursor-pointer hover:text-green-800 hover:underline">Forgot password?</button>
+          </div>
         </div>
       </div>
     </section>

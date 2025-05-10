@@ -8,7 +8,6 @@ const SearchFilter = ({ addFilterValue, meta, mapKey }) => {
     const searchValue = () => {
         apiClient.get(meta.url + searchRef.current.value)
             .then((response) => {
-                console.log(response);
                 setSearchResult(response)
             })
             .catch((error) => console.error(error)

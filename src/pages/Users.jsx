@@ -57,7 +57,7 @@ const Users = () => {
 
   const fetchUserData = (page) => {
     var params = { pageRequest: { page: page - 1, size: size }, ...payload };
-    console.log("sort", sort);
+
     if (sort.sortBy) {
       params["sort"] = sort;
     }
@@ -95,13 +95,10 @@ const Users = () => {
               sort={sort}
               setSort={setSort}
             />
-            {users && users.length > 0 ?
-              users.map((user) => (
-                <tbody
-                  key={user.id}
-                  className="text-left"
-                >
-                  <tr>
+            <tbody className="text-left">
+              {users && users.length > 0 ? (
+                users.map((user) => (
+                  <tr key={user.id}>
                     <td className="border p-2  capitalize ">{user.name}</td>
                     <td className="border p-2  !truncate">
                       {user.designation}
@@ -111,15 +108,18 @@ const Users = () => {
                     <td className="border p-2 ">{formatDate(user.doj)}</td>
                     <td className="border p-2 ">{user.managerName}</td>
                   </tr>
-                </tbody>
-              )):<tr><td colSpan={6} className="border p-2 text-center">No Data Found</td></tr>}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="border p-2 text-center">
+                    No Data Found
+                  </td>
+                </tr>
+              )}
+            </tbody>
           </table>
         </div>
-        <PageNavigator
-          page={page}
-          totalPages={totalPages}
-          setPage={setPage}
-        />
+        <PageNavigator page={page} totalPages={totalPages} setPage={setPage} />
       </div>
     </>
   );

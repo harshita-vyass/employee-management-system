@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { apiClient } from "../api/axios";
 import { formatDate } from "../utils/common";
-import { BiSort } from "react-icons/bi";
 import PageNavigator from "../components/PageNavigator";
 import { Loader } from "../components/Loader";
 import FilterInteraction from "../components/FilterInteraction";
@@ -98,13 +97,10 @@ const Projects = () => {
               sort={sort}
               setSort={setSort}
             />
-            {projectList && projectList.length > 0 ?
-              projectList.map((item) => (
-                <tbody
-                  key={projectList.id}
-                  className="text-left"
-                >
-                  <tr>
+            <tbody className="text-left">
+              {projectList && projectList.length > 0 ? (
+                projectList.map((item) => (
+                  <tr key={item.id}>
                     <td className="border p-2">{item.name}</td>
                     <td className="border p-2">{item.businessUnit}</td>
                     <td className="border p-2">{formatDate(item.startDate)}</td>
@@ -112,16 +108,18 @@ const Projects = () => {
                     <td className="border p-2">{item.clientName}</td>
                     <td className="border p-2">{item.employeeCount}</td>
                   </tr>
-                </tbody>
-              )):<tr><td colSpan={6} className="border p-2 text-center">No Data Found</td></tr>}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="border p-2 text-center">
+                    No Data Found
+                  </td>
+                </tr>
+              )}
+            </tbody>
           </table>
         </div>
-        <PageNavigator
-          page={page}
-          totalPages={totalPages}
-          setPage={setPage}
-        />
-
+        <PageNavigator page={page} totalPages={totalPages} setPage={setPage} />
       </div>
     </>
   );

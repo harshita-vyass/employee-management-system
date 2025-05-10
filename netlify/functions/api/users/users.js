@@ -1,3 +1,4 @@
+const { rolesMap, departmentsMap, businessUnitsMap, designationMap } = require("../common/constants");
 const { usersList } = require("./staticList");
 
 const users = async (event) => {
@@ -5,11 +6,11 @@ const users = async (event) => {
   const page = parseInt(payload?.pageRequest?.page) || 0;
   const pageSize = parseInt(payload?.pageRequest?.size) || 5;
   const userFilter = payload?.userIds;
-  const roleFilter = payload?.roles;
-  const designationFilter = payload?.designations;
-  const departmentFilter = payload?.departments;
+  let roleFilter = payload?.roles;
+  let designationFilter = payload?.designations;
+  let departmentFilter = payload?.departments;
   const managerFilter = payload?.managerIds;
-  const businessUnitFilter = payload?.businessUnits;
+  let businessUnitFilter = payload?.businessUnits;
   const search = payload?.search;
   const sort = payload?.sort;
 
@@ -18,17 +19,26 @@ const users = async (event) => {
       filtered = filtered.filter((c) => userFilter.includes(c.id));
     }
     if (roleFilter) {
+      roleFilter = roleFilter.map(role => rolesMap[role]);
       filtered = filtered.filter((c) => roleFilter.includes(c.role));
+      console.log("roleFilter: ", roleFilter);
+      console.log("roleFilter applied: ", filtered.length);
     }
     if (designationFilter) {
+      designationFilter = designationFilter.map(designation => designationMap[designation]);
       filtered = filtered.filter((c) =>
-        designationFilter.includes(c.designationId)
+        designationFilter.includes(c.designation)
       );
+      console.log("designationFilter: ", designationFilter);
+      console.log("designationFilter applied: ", filtered.length);
     }
     if (departmentFilter) {
+      departmentFilter = departmentFilter.map(department => departmentsMap[department]);
       filtered = filtered.filter((c) =>
-        departmentFilter.includes(c.departmentId)
+        departmentFilter.includes(c.department)
       );
+      console.log("departmentFilter: ", departmentFilter);
+      console.log("departmentFilter applied: ", filtered.length);
     }
     if (managerFilter) {
       filtered = filtered.filter((c) => managerFilter.includes(c.managerId));
@@ -37,11 +47,16 @@ const users = async (event) => {
       filtered = filtered.filter((c) =>
         businessUnitFilter.includes(c.businessUnit)
       );
+      businessUnitFilter = businessUnitFilter.map(businessUnit => businessUnitsMap[businessUnit]);
+      console.log("businessUnitFilter: ", businessUnitFilter);
+      console.log("businessUnitFilter applied: ", filtered.length);
     }
     if (search) {
       filtered = filtered.filter((c) =>
         c.name.toLowerCase().includes(search.toLowerCase())
       );
+      console.log("search: ", search);
+      console.log("search applied: ", filtered.length);
     }
   
     // Sort
@@ -53,13 +68,9 @@ const users = async (event) => {
           return a[sortBy] < b[sortBy] ? 1 : -1;
         }
       });
-    console.log("filtered", filtered);
   
     // Pagination
     const start = page * pageSize;
-    console.log("pageSize", pageSize);
-    console.log("page", page);
-    console.log("start", start);
     const paginated = filtered.slice(start, start + pageSize);
   
 

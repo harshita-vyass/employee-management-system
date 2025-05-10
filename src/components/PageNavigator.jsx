@@ -5,8 +5,6 @@ const PageNavigator = ({page, totalPages, setPage}) => {
 
     const handlePage = (page) => {
         if (page >= 1 && page <= totalPages) {
-            console.log("page: " + page);
-            console.log("Total Pages: " + totalPages);
             setPage(page);
         }
     }

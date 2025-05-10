@@ -1,3 +1,4 @@
+const { revenuePotentialMap, statusMap } = require("../common/constants");
 const { clientLists } = require("./staticList");
 
 const clients = async (event) => {
@@ -12,32 +13,35 @@ const clients = async (event) => {
   const sort = payload?.sort;
 
   let filtered = clientLists;
+  console.log("clients: ", clientLists.length);
   if (userFilter) {
     filtered = filtered.filter((c) => userFilter.includes(c.id));
+    console.log("userFilter applied: ", filtered.length);
   }
   if (regionsFilter) {
     filtered = filtered.filter((c) => regionsFilter.includes(c.regionCode));
+    console.log("regionsFilter: ", regionsFilter);
+    console.log("regionsFilter applied: ", filtered.length);
   }
   if (revenueFilter) {
-    revenueFilter = revenueFilter.map(
-      (c) => c.charAt(0).toUpperCase() + c.slice(1).toLowerCase()
-    );
-    filtered = filtered.filter((c) =>
-      revenueFilter.includes(c.revenuePotential)
-    );
+    revenueFilter = revenueFilter.map(revenue => revenuePotentialMap[revenue]);
+    filtered = filtered.filter((c) => revenueFilter.includes(c.revenuePotential));
+    console.log("revenueFilter: ", revenueFilter);
+    console.log("revenueFilter applied: ", filtered.length);
   }
   if (statusFilter) {
-    statusFilter = statusFilter.map(
-      (c) => c.charAt(0).toUpperCase() + c.slice(1).toLowerCase()
-    );
-
+    statusFilter = statusFilter.map(status => statusMap[status]);
     filtered = filtered.filter((c) => statusFilter.includes(c.status));
+    console.log("statusFilter: ", statusFilter);
+    console.log("statusFilter applied: ", filtered.length);
   }
 
   if (search) {
     filtered = filtered.filter((c) =>
       c.name.toLowerCase().includes(search.toLowerCase())
     );
+    console.log("search: ", search);
+    console.log("search applied: ", filtered.length);
   }
 
   // Sort
@@ -49,13 +53,9 @@ const clients = async (event) => {
       return a[sortBy] < b[sortBy] ? 1 : -1;
     }
   });
-  console.log("filtered", filtered);
 
   // Pagination
   const start = page * pageSize;
-  console.log("pageSize", pageSize);
-  console.log("page", page);
-  console.log("start", start);
   const paginated = filtered.slice(start, start + pageSize);
 
   return {

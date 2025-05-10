@@ -7,8 +7,7 @@ const Notification = ({ toggleNotifications }) => {
     const empId = JSON.parse(localStorage.getItem("employee"))?.id;
 
     const markNotificationAsRead = (notification) => {
-        console.log(notification);
-
+     
         if (notification.viewed === true) {
             return;
         }
@@ -55,7 +54,7 @@ const Notification = ({ toggleNotifications }) => {
     
         const regex = /##[^#]+##/g;
         const matches = notification.content.match(regex);
-        console.log(matches);
+
     
         let keys = [];
         if (matches) {
@@ -64,7 +63,6 @@ const Notification = ({ toggleNotifications }) => {
             });
         }
     
-        console.log(keys);
     
         let updatedString = notification.content;
         keys.map((key) => {
@@ -83,7 +81,6 @@ const Notification = ({ toggleNotifications }) => {
             apiClient
                 .get("notifications/" + empId)
                 .then((response) => {
-                    console.log(response);
                     setNotifications(response);
                 })
                 .catch((error) => {

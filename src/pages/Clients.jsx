@@ -58,7 +58,6 @@ const Clients = () => {
     const getClients = (page) => {
         const search = searchRef.current.value
         const params = { pageRequest: { page: page - 1, size: size }, ...payload, search }
-        console.log(params);
         if (searchRef.current.value) {
             params.search = searchRef.current.value;
         }
@@ -68,7 +67,6 @@ const Clients = () => {
         apiClient
             .post("/clients", params)
             .then((response) => {
-                console.log(response)
                 setClientList(response.items);
                 setTotalPages(response.meta.totalPages);
             })
@@ -77,7 +75,7 @@ const Clients = () => {
 
     return (
         <>
-        {loading && <Loader />}
+            {loading && <Loader />}
             <div className="space-y-5 pt-5 w-11/12  mx-auto">
                 <FilterInteraction
                     pageName={"clientSearchPage"}
@@ -87,39 +85,39 @@ const Clients = () => {
                     searchRef={searchRef}
                     setPayload={setPayload}
                 />
-                <div className="whitespace-nowrap overflow-auto">   
+                <div className="whitespace-nowrap overflow-auto">
                     <table className="text-black w-full border-collapse">
                         <HeaderList headersList={headersList} sort={sort} setSort={setSort} />
-                        {clientList && clientList.length > 0 ?
-                            clientList.map((item) => (
-                                <tbody
-                                    key={item.id}
-                                    className=""
-                                >
-                                    <tr>
-                                    <td className="border p-2">{item.name}</td>
-                                    <td className="border p-2">
-                                        {formatDate(item.associationSince)}
-                                    </td>
-                                    <td className="border p-2">
-                                        {formatDate(item.associationTill)}
-                                    </td>
-                                    <td className="border p-2 ">{item.revenuePotential}</td>
-                                    <td className="border p-2">{item.status}</td>
-                                    <td className="border p-2" title={item.regionName}>
-                                        {item.regionCode}
-                                    </td>
+                        <tbody
+                        >
+                            {clientList && clientList.length > 0 ?
+                                clientList.map((item) => (
+
+                                    <tr key={item.id}>
+                                        <td className="border p-2">{item.name}</td>
+                                        <td className="border p-2">
+                                            {formatDate(item.associationSince)}
+                                        </td>
+                                        <td className="border p-2">
+                                            {formatDate(item.associationTill)}
+                                        </td>
+                                        <td className="border p-2 ">{item.revenuePotential}</td>
+                                        <td className="border p-2">{item.status}</td>
+                                        <td className="border p-2" title={item.regionName}>
+                                            {item.regionCode}
+                                        </td>
                                     </tr>
-                                </tbody>
-                            )):<tr><td colSpan={6} className="border p-2 text-center">No Data Found</td></tr>}
+
+                                )) : <tr><td colSpan={6} className="border p-2 text-center">No Data Found</td></tr>}
+                        </tbody>
                     </table>
-                    </div>
-                    <PageNavigator
-                        page={page}
-                        totalPages={totalPages}
-                        setPage={setPage}
-                    />
-            
+                </div>
+                <PageNavigator
+                    page={page}
+                    totalPages={totalPages}
+                    setPage={setPage}
+                />
+
             </div>
         </>
     );

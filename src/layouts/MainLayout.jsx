@@ -7,7 +7,7 @@ const MainLayout = () => {
     <div>
       <Navbar />
 
-      <div className='md:ml-[20%] md:py-0 py-10'>
+      <div className='lg:ml-[15%] lg:py-0 py-10'>
         <Outlet />
       </div>
     </div>

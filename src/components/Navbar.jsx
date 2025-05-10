@@ -1,13 +1,13 @@
 import React, { useReducer, useState } from 'react'
 import { FaRegCircleUser, FaUsers } from 'react-icons/fa6'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { IoNotificationsCircle } from "react-icons/io5";
 import { FaHome } from "react-icons/fa";
 import { SlCalender } from "react-icons/sl";
 import { TbUserSearch } from "react-icons/tb";
 import Notification from './Notification';
 import { GrProjects } from 'react-icons/gr';
-import { getDisplayName } from '../utils/common';
+import { getDisplayName, getStringFromLocalStorage } from '../utils/common';
 import Logout from './Logout';
 
 const links = [
@@ -18,47 +18,49 @@ const links = [
   { to: "/admin/clients", icon: <FaUsers />, label: "Clients" }
 ];
 const Navbar = () => {
-  const [open, setIsOpened] = useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
   const [openNotifications, toggleNotifications] = useReducer((flag) => !flag, false)
-  const [showSidebar, toggleShowSidebar] = useReducer((flag) => !flag, false)
+  const [showSidebar, setShowSidebar] = useState(false)
   const [openConfirmLogout, toggleConfirmLogout] = useReducer(flag => !flag, false)
+  const location = useLocation();
 
   const toggleOpen = () => {
-    setIsOpened(prev => !prev);
+    setOpenProfile(prev => !prev);
   };
 
-  const closeNavbar = () => {
-    setIsOpened(false);
-    toggleShowSidebar();
+  const toggleShowSidebar = () => {
+    setShowSidebar(prev => !prev);
   }
 
-
   const handleLogOut = () => {
-    console.log("logged out")
     toggleConfirmLogout();
-    closeNavbar()
+    setShowSidebar(false);
   };
 
   return (
     <>
       {showSidebar && (
         <div
-          onClick={closeNavbar}
-          className="fixed inset-0 bg-black/30  z-30 transition-opacity duration-300"
+          onClick={()=>{
+            toggleShowSidebar()}
+          }
+          className="fixed inset-0 bg-black/30  z-20 transition-opacity duration-300"
         />
       )}
 
       {openNotifications && (
         <div
           onClick={toggleNotifications}
-          className="fixed inset-0 bg-black/30  z-30 transition-opacity duration-300"
+          className="fixed inset-0 bg-black/30  z-40 transition-opacity duration-300"
         />
       )}
 
-      <div className='md:hidden bg-green-800 w-full h-[40px] fixed z-50 flex justify-between items-center px-2'>
+      <div className='lg:hidden bg-green-800 w-full h-[40px] fixed z-50 flex justify-between items-center px-2'>
         <button
-          className="  text-white  rounded"
-          onClick={closeNavbar}
+          className="text-white rounded"
+          onClick={()=>{;
+            toggleShowSidebar()}
+          }
         >
           <svg
             className="w-6 h-6"
@@ -76,31 +78,35 @@ const Navbar = () => {
           </svg>
         </button>
         <p className='font-semibold text-white'>
-          {getDisplayName()}
+          {getStringFromLocalStorage('employee')?.firstName}
         </p>
       </div>
-      <div className={`bg-green-800 sm:w-[20%] w-[50%] h-[100vh] fixed z-40 transition-transform duration-300 ease-in-out
-      ${showSidebar ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`} >
+      <div className={`bg-green-800 lg:w-[15%] sm:w-[30%] w-[50%] h-[100vh] fixed z-40
+       transition-transform duration-300 ease-in-out
+      ${showSidebar ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`} >
 
         <div className="flex flex-col justify-between min-h-[100dvh]  text-white ">
-          <div className="pt-20">
-            {/* <img src={'/assets/IMG_6061-Photoroom.png'} alt="Company Logo" /> */}
+          <div className='lg:pt-0 pt-10'>
+            <img className='2xl:w-3/5 lg:w-4/5 w-[70%] px-2 py-3' src={'/assets/logo.png'} alt="Company Logo" />
             {links.map((link, index) => (
-              <p key={index} className="font-semibold text-lg" onClick={toggleShowSidebar}>
-                <Link to={link.to} className='flex items-center gap-2 hover:bg-white/10 p-3'>{link.icon}{link.label}</Link>
+              <p key={index} onClick={()=>setShowSidebar(false)} className={` ${location.pathname === link.to ? "bg-green-700" : ""} font-semibold text-lg`}>
+                <Link to={link.to} className='flex items-center gap-2 hover:bg-white/10 p-3'>
+                  {link.icon}{link.label}
+                </Link>
               </p>
             ))}
+
           </div>
           <div className="relative inline-block sm:w-11/12 sm:mx-auto pb-5">
             <div className='flex flex-col gap-4 items-start'>
-              <button className='ml-2' onClick={() => {
+              <button onClick={() => {
                 toggleNotifications();
-                toggleShowSidebar();
-              }}><IoNotificationsCircle size={28} /></button>
+                setShowSidebar(false)
+              }}><IoNotificationsCircle size={28} className='ml-1.5' /></button>
               <button onClick={(e) => { e.stopPropagation(); toggleOpen(); }}>
                 <FaRegCircleUser size={21} className='ml-2' />
               </button>
-              {open && (
+              {openProfile && (
                 <div className="absolute text-base text-center px-2  capitalize flex flex-col justify-between py-3
               left-10 bottom-5 bg-white text-black w-32 h-32 rounded-md" >
                   <div>

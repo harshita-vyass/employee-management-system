@@ -17,9 +17,6 @@ const LeaveManager = () => {
 
   const handleData = (e) => {
     e.preventDefault();
-    console.log(leaveTypeRef.current.value);
-    console.log(startDateRef.current.value);
-    console.log(endDateRef.current.value);
 
     const payload = {
       type: leaveTypeRef.current.value,
@@ -32,7 +29,6 @@ const LeaveManager = () => {
     apiClient
       .post("leaves/requests", payload)
       .then((response) => {
-        console.log(response);
         setLeaveUpdateTrigger((prev) => prev + 1);
       })
       .catch((error) => {
@@ -41,7 +37,6 @@ const LeaveManager = () => {
   };
 
   const handleLeaveStatus = (leaveId, action) => {
-    console.log("Leave id:" + leaveId, "Action :" + action);
     apiClient
       .patch(`/leaves/requests/${leaveId}/${action}`)
       .then(() => {
@@ -66,7 +61,6 @@ const LeaveManager = () => {
     apiClient
       .get("leaves/requests/" + user.id,)
       .then((response) => {
-        console.log(response);
         setAppliedLeaves(response);
       })
       .catch((error) => {
@@ -85,7 +79,6 @@ const LeaveManager = () => {
     apiClient
       .get("leaves/balance/" + user.id,)
       .then((response) => {
-        console.log(response);
         setLeaveStats(response);
       })
       .catch((error) => {
@@ -105,7 +98,7 @@ const LeaveManager = () => {
       .get("constants/leaveTypes")
       .then((response) => {
         setLeaveTypes(response);
-        localStorage.setItem("leaveTypes", JSON.stringify(response));
+        // localStorage.setItem("leaveTypes", JSON.stringify(response));
       })
       .catch((error) => {
         console.error(error);
@@ -123,10 +116,10 @@ const LeaveManager = () => {
               return (
                 <div
                   key={index}
-                  className="p-4 md:w-[29%] w-[32%] md:flex items-center gap-4 bg-green-800 rounded-md text-white "
+                  className="p-4 md:w-[29%] w-[32%] text-center gap-4 bg-green-800 rounded-md text-white "
                 >
-                  <p className="text-5xl text-center">{value}</p>
-                  <p className="text-lg capitalize md:text-left text-center">{label} Leaves</p>
+                  <p className="md:text-5xl text-3xl ">{value}</p>
+                  <p className="md:text-lg text-sm capitalize ">{label} Leaves</p>
                 </div>
               );
             })}
@@ -227,7 +220,6 @@ const LeaveManager = () => {
 
       {isManager && (
         <>
-        {/* // <div className="bg-white shadow-md rounded-lg p-6 mb-6"> */}
           <h2 className="text-2xl font-bold text-black mb-4">
             Leaves for Approval
           </h2>
@@ -248,7 +240,7 @@ const LeaveManager = () => {
                 <tr key={leave.id}>
                   <td className="border p-2">{leave.employeeId}</td>
                   <td className="border p-2">
-                    {getLeaveTypeFromKey(leave.type)}
+                    {leaveTypes[leave.type]}
                   </td>
                   <td className="border p-2">{formatDate(leave.startDate)}</td>
                   <td className="border p-2">{formatDate(leave.endDate)}</td>
